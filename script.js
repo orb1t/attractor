@@ -3,6 +3,7 @@ var sizeFactor = 0.05 // inflate speed
 var velocityFactor = 0.2 // drag velocity
 var forceFactor = forceFactorDef = 500.0 // forces
 var timeFactor = timeFactorDef = 0.5 // simulation speed
+var canvasScale = 1
 
 var interaction = { // mouse or touch state
     state: 0,
@@ -128,6 +129,10 @@ $(function() {
 
     var $canvas = $('#canvas')
     canvas = document.getElementById("canvas")
+    if (window.devicePixelRatio == 2) {
+        canvas.getContext("2d").scale(2, 2);
+        canvasScale = 2
+    }
 
     $('#mode').on('change', function() {
         if ($(this).val() == 0)
@@ -141,58 +146,66 @@ $(function() {
             timeFactor = timeFactorDef * 0.5
         else if ($(this).val() == 1)
             timeFactor = timeFactorDef
-        else 
+        else
             timeFactor = timeFactorDef * 4.0
     })
 
-	$('#reset').click(function() {
-		bubbles = []
+    $('#reset').click(function() {
+        bubbles = []
     })
 
-    $canvas.mousedown(function(e) {
+    var mousedown = function(e) {
         if (interaction.state != 0) {
-            mouseEnd(e)
+            mouseend(e)
             return
         }
-        if (e.which != 1) { // left button
-            mouseEnd(e)
+        if (!e.targetTouches && e.which != 1) { // left button
+            mouseend(e)
             return
         }
 
         interaction.state = 1
         interaction.startTime = new Date()
-        interaction.startX = e.offsetX
-        interaction.startY = e.offsetY
+        interaction.startX = (e.targetTouches ? e.targetTouches[0].pageX : e.offsetX) * canvasScale
+        interaction.startY = (e.targetTouches ? e.targetTouches[0].pageY : e.offsetY) * canvasScale
         bubble = $.extend({}, bubbleZero)
         bubble.x = interaction.startX
         bubble.y = interaction.startY
         bubble.colors = randomColors()
         bubbles.push(bubble)
-    })
+    }
 
-    $canvas.mousemove(function(e) {
+    var mousemove = function(e) {
         if (interaction.state == 1) { // drag to set initial velocity
             var dt = 1 + ((new Date()) - interaction.startTime)
-            bubble.vx = 1.0 * (e.offsetX - interaction.startX) / dt * 1000 * velocityFactor
-            bubble.vy = 1.0 * (e.offsetY - interaction.startY) / dt * 1000 * velocityFactor
+            var x = (e.targetTouches ? e.targetTouches[0].pageX : e.offsetX) * canvasScale
+            var y = (e.targetTouches ? e.targetTouches[0].pageY : e.offsetY) * canvasScale
+            bubble.vx = 1.0 * (x - interaction.startX) / dt * 1000 * velocityFactor
+            bubble.vy = 1.0 * (y - interaction.startY) / dt * 1000 * velocityFactor
         }
-    })
+        e.preventDefault()
+    }
 
-    var mouseEnd = function(e) {
+    var mouseend = function(e) {
         interaction.state = 0 // end interaction
     }
 
-    $canvas.mouseup(mouseEnd) // skepticism?
-        // $canvas.contextmenu(mouseEnd)
-    $canvas.mouseout(mouseEnd)
-    $canvas.mouseleave(mouseEnd)
+    $canvas.on({ 'touchstart': mousedown });
+    $canvas.on({ 'touchmove': mousemove });
+    $canvas.on({ 'touchend': mouseend });
+    $canvas.on({ 'touchcancel': mouseend });
+    $canvas.mousedown(mousedown)
+    $canvas.mousemove(mousemove)
+    $canvas.mouseup(mouseend)
+    $canvas.mouseout(mouseend) // skepticism?
+    $canvas.mouseleave(mouseend)
 
     var lastTick = new Date() // initial time
     setInterval(function() { // simulation loop
-            if (canvas.width != $canvas.width()) // canvas size changed?
-                canvas.width = $canvas.width() // adapt
-            if (canvas.height != $canvas.height())
-                canvas.height = $canvas.height()
+            if (canvas.width != $canvas.width() * canvasScale) // canvas size changed?
+                canvas.width = $canvas.width() * canvasScale // adapt
+            if (canvas.height != $canvas.height() * canvasScale)
+                canvas.height = $canvas.height() * canvasScale
             if (interaction.state == 1) { // inflate current bubble if mouse down
                 bubble.size = 1 + ((new Date()) - interaction.startTime) * sizeFactor
             }
