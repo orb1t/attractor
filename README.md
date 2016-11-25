@@ -2,7 +2,7 @@
 # attractor - html5 canvas experiment
 Coding experiment on html5, canvas, physics, and javascript.
 
-[DEMO](http://https://seredot.github.io/attractor/)
+[DEMO](https://seredot.github.io/attractor/)
 
 ### License
 
