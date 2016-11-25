@@ -1,0 +1,63 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>attractor - html5 canvas experiment</title>
+    <meta name="description" content="Coding experiment on html5, canvas, physics, and javascript." />
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@serdarkabaoglu">
+    <meta name="twitter:title" content="attractor - html5 canvas experiment">
+    <meta name="twitter:description" content="Coding experiment on html5, canvas, physics, and javascript.">
+    <meta name="twitter:creator" content="@serdarkabaoglu">
+    <meta name="twitter:image" content="http://www.example.com/image.jpg">
+    <meta property="og:title" content="attractor - html5 canvas experiment" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://www.example.com/" />
+    <meta property="og:image" content="screen.png" />
+    <meta property="og:description" content="Coding experiment on html5, canvas, physics, and javascript." />
+    <meta property="og:site_name" content="github" />
+    <meta property="fb:admins" content="560403047" />
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    span {
+        color: white;
+        font-family: monospace;
+        cursor: default;
+    }
+    
+    #controls {
+        position: fixed;
+    }
+    
+    #canvas {
+        width: 100%;
+        height: 100%;
+        background-color: #212121;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="controls">
+        <select id="mode">
+            <option value="0">attract</option>
+            <option value="1">repel</option>
+        </select>
+        <select id="speed">
+            <option value="0">slow</option>
+            <option value="1">normal</option>
+            <option value="2">fast</option>
+        </select>
+        <button id="reset">reset</button>
+        <span>click, hold, drag, release.</span>
+    </div>
+    <canvas id="canvas"></canvas>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="script.js"></script>
+
+</html>
