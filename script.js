@@ -76,8 +76,8 @@ var moveThings = function(dt) {
                     case ForceFalloffEnum.CUBIC: var falloff = distance * distance * distance; break
                 }
                 var force = (forceFactorSign * forceFactorMag) * (b.size * b2.size) / falloff
-                b.fx += force * dx // resultant force
-                b.fy += force * dy
+                b.fx += force * (dx / distance) // resultant force
+                b.fy += force * (dy / distance)
             }
         })
         b.radius = Math.sqrt(b.size) * 5
@@ -165,13 +165,13 @@ $(function() {
     $('#falloff').on('change', function() {
         if ($(this).val() == 'linear') {
             forceFalloff = ForceFalloffEnum.LINEAR
-            forceFactorMag = 10
+            forceFactorMag = 500
         } else if ($(this).val() == 'cubic') {
             forceFalloff = ForceFalloffEnum.CUBIC
-            forceFactorMag = 20000
+            forceFactorMag = 1250000
         } else {
             forceFalloff = ForceFalloffEnum.QUADRATIC
-            forceFactorMag = 500
+            forceFactorMag = 25000
         }
     })
 
