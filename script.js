@@ -162,6 +162,19 @@ $(function() {
             timeFactor = timeFactorDef * 4.0
     })
 
+    $('#falloff').on('change', function() {
+        if ($(this).val() == 'linear') {
+            forceFalloff = ForceFalloffEnum.LINEAR
+            forceFactorMag = 10
+        } else if ($(this).val() == 'cubic') {
+            forceFalloff = ForceFalloffEnum.CUBIC
+            forceFactorMag = 20000
+        } else {
+            forceFalloff = ForceFalloffEnum.QUADRATIC
+            forceFactorMag = 500
+        }
+    })
+
     $('#reset').click(function() {
         bubbles = []
     })
