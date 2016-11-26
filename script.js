@@ -1,7 +1,8 @@
 var canvas = null // canvas
 var sizeFactor = 0.05 // inflate speed
 var velocityFactor = 0.2 // drag velocity
-var forceFactor = forceFactorDef = 500.0 // forces
+var forceFactorSign = +1 // attract/repel
+var forceFactorMag = 500 // attract/repel strength
 var timeFactor = timeFactorDef = 0.5 // simulation speed
 var canvasScale = 1
 
@@ -63,7 +64,7 @@ var moveThings = function(dt) {
                     }
                     return // too close
                 }
-                var force = b.size * b2.size / distance * forceFactor
+                var force = b.size * b2.size / distance * (forceFactorSign * forceFactorMag)
                 b.fx += force * dx / distance // resultant force
                 b.fy += force * dy / distance
             }
@@ -136,9 +137,9 @@ $(function() {
 
     $('#mode').on('change', function() {
         if ($(this).val() == 0)
-            forceFactor = forceFactorDef
+            forceFactorSign = +1
         else
-            forceFactor = -forceFactorDef
+            forceFactorSign = -1
     })
 
     $('#speed').on('change', function() {
