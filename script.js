@@ -9,7 +9,7 @@ var ForceFalloffEnum = {
     QUADRATIC: 2,
     CUBIC: 3
 }
-var forceFalloff = ForceFalloffEnum.QUADRATIC // gravity (/anti-gravity) force falloff with distance
+var forceFalloff = ForceFalloffEnum.LINEAR // gravity (/anti-gravity) force falloff with distance
 var canvasScale = 1
 
 var interaction = { // mouse or touch state
