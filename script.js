@@ -4,6 +4,12 @@ var velocityFactor = 0.2 // drag velocity
 var forceFactorSign = +1 // attract/repel
 var forceFactorMag = 500 // attract/repel strength
 var timeFactor = timeFactorDef = 0.5 // simulation speed
+var ForceFalloffEnum = {
+    LINEAR: 1,
+    QUADRATIC: 2,
+    CUBIC: 3
+}
+var forceFalloff = ForceFalloffEnum.QUADRATIC // gravity (/anti-gravity) force falloff with distance
 var canvasScale = 1
 
 var interaction = { // mouse or touch state
@@ -64,7 +70,12 @@ var moveThings = function(dt) {
                     }
                     return // too close
                 }
-                var force = (forceFactorSign * forceFactorMag) * (b.size * b2.size) / (distance * distance)
+                switch (forceFalloff) {
+                    case ForceFalloffEnum.LINEAR: var falloff = distance; break
+                    case ForceFalloffEnum.QUADRATIC: var falloff = distance * distance; break
+                    case ForceFalloffEnum.CUBIC: var falloff = distance * distance * distance; break
+                }
+                var force = (forceFactorSign * forceFactorMag) * (b.size * b2.size) / falloff
                 b.fx += force * dx // resultant force
                 b.fy += force * dy
             }
