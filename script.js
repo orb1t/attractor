@@ -64,9 +64,9 @@ var moveThings = function(dt) {
                     }
                     return // too close
                 }
-                var force = b.size * b2.size / distance * (forceFactorSign * forceFactorMag)
-                b.fx += force * dx / distance // resultant force
-                b.fy += force * dy / distance
+                var force = (forceFactorSign * forceFactorMag) * (b.size * b2.size) / (distance * distance)
+                b.fx += force * dx // resultant force
+                b.fy += force * dy
             }
         })
         b.radius = Math.sqrt(b.size) * 5
